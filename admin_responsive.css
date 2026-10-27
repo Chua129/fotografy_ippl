@@ -1,0 +1,338 @@
+/* =====================================================================
+   admin_responsive.css — Creative Pixel (Panel Admin)
+   Dipakai di: admin_dashboard, admin_konfirmasi, admin_etalase,
+   admin_edit_paket, admin_atur_kuota, admin_jadwal, admin_history,
+   admin_pembayaran, admin_pesanan_manual.
+
+   PENTING: muat PALING AKHIR (setelah style.css dan blok <style> halaman)
+   supaya bisa menimpa aturan lama.
+
+   Breakpoint:
+     <= 1280px  laptop kecil
+     <= 1100px  tablet landscape
+     <= 1024px  sidebar jadi drawer (tombol hamburger di bar atas)
+     <=  768px  HP besar / tablet kecil
+     <=  640px  HP
+     <=  480px  HP kecil
+     <=  360px  HP sangat kecil
+===================================================================== */
+
+/* ---------- Dasar (semua ukuran) ---------- */
+.admin-main { min-width: 0; max-width: 100%; }
+.admin-main img { max-width: 100%; }
+
+/* Elemen bantu dibuat otomatis oleh admin_responsive.js; hidden di desktop */
+.admin-mobilebar, .admin-overlay { display: none; }
+
+/* Pembungkus tabel supaya bisa digeser ke samping di layar sempit */
+.table-scroll { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.table-scroll > table { min-width: 640px; }
+.table-scroll > .inventory-table { min-width: 780px; }
+.table-wrap > table { min-width: 560px; }
+
+/* ---------- Laptop kecil ---------- */
+@media (max-width: 1280px) {
+  .admin-main { padding-left: 32px; padding-right: 32px; }
+}
+
+/* ---------- Tablet landscape ---------- */
+@media (max-width: 1100px) {
+  .stats-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .admin-main .stats-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .manual-order-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---------- Sidebar jadi drawer ---------- */
+@media (max-width: 1024px) {
+  body { flex-direction: column !important; }
+  body.admin-nav-open { overflow: hidden; }
+
+  /* Bar atas (hamburger + logo) */
+  .admin-mobilebar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 10px 16px;
+    background: #1B1A17;
+    color: #fff;
+    border-bottom: 1px solid rgba(255, 255, 255, .1);
+  }
+  .admin-menu-btn {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 44px; height: 44px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, .18);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, .06);
+    cursor: pointer;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .admin-menu-btn span {
+    display: block;
+    width: 20px; height: 2px;
+    background: #fff;
+    border-radius: 2px;
+    transition: transform .2s ease, opacity .2s ease;
+  }
+  body.admin-nav-open .admin-menu-btn span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  body.admin-nav-open .admin-menu-btn span:nth-child(2) { opacity: 0; }
+  body.admin-nav-open .admin-menu-btn span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .admin-mobilebar-brand {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    letter-spacing: .02em;
+  }
+  .admin-mobilebar-brand span { color: var(--accent); }
+  .admin-mobilebar-page {
+    margin-left: auto;
+    font-size: .78rem;
+    color: rgba(255, 255, 255, .6);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 45%;
+  }
+
+  /* Sidebar = panel geser dari kiri */
+  .admin-sidebar {
+    position: fixed !important;
+    top: 0; left: 0; bottom: 0;
+    width: 280px !important;
+    max-width: 86vw;
+    height: 100%;
+    padding: 24px 20px !important;
+    z-index: 200;
+    overflow-y: auto;
+    transform: translateX(-102%);
+    transition: transform .25s ease;
+    box-shadow: none;
+  }
+  body.admin-nav-open .admin-sidebar {
+    transform: translateX(0);
+    box-shadow: 0 0 40px rgba(0, 0, 0, .45);
+  }
+  .admin-sidebar .sidebar-brand { margin-bottom: 28px !important; }
+  .admin-sidebar .sidebar-menu {
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+  .admin-sidebar .sidebar-menu a { padding: 14px 16px; }
+  .admin-sidebar .sidebar-menu li[style] { margin-top: auto !important; }
+
+  .admin-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    background: rgba(0, 0, 0, .55);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease;
+  }
+  body.admin-nav-open .admin-overlay { opacity: 1; pointer-events: auto; }
+
+  /* Konten utama: penuh lebar */
+  .admin-main {
+    width: 100%;
+    flex: 1 1 auto;
+    border-radius: 20px 20px 0 0 !important;
+    padding: 28px 24px 48px !important;
+  }
+  .admin-main.admin-main { margin: 0; }
+
+  /* Bar atas jadwal ikut tidak nempel (sudah ada bar hamburger) */
+  .page-topbar { position: static !important; padding: 14px 24px !important; }
+  .page-content { padding: 24px 24px 56px !important; }
+}
+
+/* ---------- HP besar / tablet kecil ---------- */
+@media (max-width: 768px) {
+  .admin-main { padding: 22px 16px 40px !important; }
+  .page-topbar { padding: 12px 16px !important; flex-wrap: wrap; gap: 8px; }
+  .page-content { padding: 20px 16px 44px !important; }
+
+  /* Judul halaman */
+  .dash-title, .page-title { font-size: 1.7rem !important; }
+  .page-header-title { font-size: 1.6rem; }
+
+  /* Header halaman: susun vertikal */
+  .admin-main .dash-header,
+  .admin-main .header-actions,
+  .admin-main .page-head,
+  .admin-main .table-head,
+  .admin-main .admin-topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .admin-main .admin-topbar { align-items: stretch; }
+  .admin-main .user-profile { text-align: left; }
+  .admin-main .btn-group { flex-wrap: wrap; width: 100%; }
+  .admin-main .btn-group > * { flex: 1 1 auto; justify-content: center; }
+  .btn-export, .btn-dark-primary, .btn-primary { width: 100%; justify-content: center; }
+
+  /* Pencarian */
+  .search-box, .search-box-top { width: 100%; max-width: 100%; }
+
+  /* Kartu statistik */
+  .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .stats-grid-4 { gap: 14px; margin-bottom: 28px; }
+  .admin-main .stats-strip {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding-top: 12px; padding-bottom: 12px;
+  }
+  .admin-main .stats-strip .ss-item {
+    border-right: none !important;
+    border-bottom: 1px dashed var(--line);
+    padding: 12px 18px;
+  }
+  .admin-main .stats-strip > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .stat-card { padding: 18px; }
+
+  /* Tabel: jangan terlalu rapat */
+  .admin-main th, .admin-main td { padding: 12px; }
+  .table-section { padding: 18px; }
+
+  /* Kartu pesanan (konfirmasi) */
+  .order-card { padding: 18px; }
+  .oc-top { flex-direction: column; gap: 14px; }
+  .oc-pay-right { text-align: left; }
+  .oc-info-left { flex-wrap: wrap; }
+  .oc-actions { flex-direction: column-reverse; }
+  .oc-actions > *, .oc-actions form { width: 100%; }
+  .oc-actions button { width: 100%; justify-content: center; }
+
+  /* Kartu & form */
+  .card-box, .form-card, .mo-box { padding: 20px; }
+  .filter-bar { gap: 12px; }
+  .filter-pills-row { gap: 6px; }
+
+  /* Jadwal */
+  .control-bar { padding: 12px 14px; gap: 10px; }
+  .control-bar .filter-sep { display: none; }
+  .month-nav { width: 100%; justify-content: space-between; }
+  .filter-group { width: 100%; }
+
+  /* History */
+  .portfolio-grid { gap: 18px; margin-top: 24px; }
+  .pc-header { height: 200px; }
+  .pc-name { font-size: 1.35rem; }
+  .pc-total .nominal { font-size: 1.45rem; }
+
+  /* Pemesanan manual */
+  .admin-main .manual-order-grid { gap: 18px; }
+
+  /* Input 16px supaya iOS tidak auto-zoom + target sentuh nyaman */
+  .admin-main input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=hidden]),
+  .admin-main select, .admin-main textarea { font-size: 16px !important; }
+  .admin-main button, .admin-main .btn-save, .admin-main .btn-submit,
+  .admin-main .btn-cancel, .admin-main .btn-confirm, .admin-main .btn-finish,
+  .admin-main .btn-primary, .admin-main .btn-dark, .admin-main .btn-outline { min-height: 44px; }
+  .table-input { width: 84px; padding: 10px 8px; }
+}
+
+/* ---------- HP ---------- */
+@media (max-width: 640px) {
+  .stats-grid { grid-template-columns: minmax(0, 1fr); }
+  .stat-card-value, .sc4-value { font-size: 1.6rem; }
+
+  .catalog-grid { gap: 18px; }
+  .cc-header { height: 160px; }
+  .cc-body { padding: 16px; }
+  .cc-actions { flex-wrap: wrap; }
+  .cc-actions .cc-btn:not(.cc-btn-icon) { flex: 1 1 calc(50% - 8px); }
+
+  .cover-upload { flex-direction: column; }
+  .cover-preview { width: 100%; }
+  .hb-options { gap: 10px; }
+
+  .admin-main .btn-submit,
+  .admin-main .btn-cancel {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    margin: 0 0 10px;
+  }
+
+  /* Kalender jadwal */
+  .cal { gap: 4px; padding: 10px; }
+  .cal-cell { min-height: 64px; padding: 5px 6px; gap: 3px; border-radius: 8px; }
+  .cal-empty { min-height: 64px; }
+  .cal-num { font-size: 1rem; }
+  .cal-sisa { font-size: .66rem; }
+  .cal-dow { font-size: .6rem; }
+  .cal-cell.hari-ini .cal-num::after { display: none; }
+  .cal-cell.hari-ini { box-shadow: inset 0 0 0 2px #1B1A17; }
+  .cal-legend { gap: 10px 14px; padding: 0 14px 14px; }
+  .panel-head { padding: 14px 16px; }
+
+  /* History */
+  .pc-status { grid-template-columns: minmax(0, 1fr); }
+  .pc-meta { flex-wrap: wrap; }
+  .pc-meta .lokasi { max-width: 100%; }
+  .pc-body { padding: 16px; }
+
+  /* Konfirmasi */
+  .oc-avatar { width: 48px; height: 48px; }
+  .oc-details { gap: 8px 14px; }
+}
+
+/* ---------- HP kecil ---------- */
+@media (max-width: 480px) {
+  .admin-main { padding: 18px 14px 36px !important; }
+  .page-content { padding: 16px 14px 40px !important; }
+
+  .dash-title, .page-title { font-size: 1.5rem !important; }
+  .page-header-title { font-size: 1.4rem; }
+
+  .stats-grid-4, .stats-grid { grid-template-columns: minmax(0, 1fr); }
+  .admin-main .stats-strip { grid-template-columns: minmax(0, 1fr); }
+  .admin-main .stats-strip > :last-child:nth-child(odd) { grid-column: auto; }
+
+  .card-box, .form-card, .mo-box, .table-section, .order-card { padding: 16px; }
+  .breadcrumb { font-size: .75rem; line-height: 1.6; }
+
+  .cc-actions .cc-btn:not(.cc-btn-icon) { flex: 1 1 100%; }
+  .cc-price-main { font-size: 1.25rem; }
+
+  /* Kalender: tinggal angka + sisa */
+  .cal { gap: 3px; padding: 8px; }
+  .cal-cell { min-height: 54px; padding: 4px; }
+  .cal-empty { min-height: 54px; }
+  .cal-bar { display: none; }
+
+  .pc-header { height: 176px; }
+  .pc-caption { left: 14px; right: 14px; }
+  .pc-name { font-size: 1.2rem; }
+  .pc-total { flex-wrap: wrap; }
+
+  .admin-mobilebar-page { display: none; }
+  .badge-chips { gap: 6px; }
+}
+
+/* ---------- HP sangat kecil ---------- */
+@media (max-width: 360px) {
+  .admin-mobilebar { padding: 8px 12px; }
+  .admin-main { padding-left: 12px !important; padding-right: 12px !important; }
+  .cal-cell { min-height: 48px; }
+  .cal-num { font-size: .9rem; }
+  .cal-sisa { font-size: .6rem; }
+}
+
+/* ---------- Cetak: sembunyikan elemen navigasi ---------- */
+@media print {
+  .admin-mobilebar, .admin-overlay { display: none !important; }
+}
